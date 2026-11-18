@@ -1,0 +1,2 @@
+[functions.guide-download]
+verify_jwt = false
