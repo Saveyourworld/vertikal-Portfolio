@@ -4,3 +4,40 @@
 @media(max-width:760px){.container{width:min(100% - 32px,580px)}.hero{padding:109px 0 70px;min-height:0}.hero-grid{display:flex;flex-direction:column;gap:30px}.hero-video-wrap{width:100%;max-width:520px}.hero-video{aspect-ratio:16/10}.hero-copy{padding:0}.hero h1{font-size:clamp(36px,9vw,53px)}.hero-copy>p{font-size:15px}.hero-actions .btn{width:100%}.video-top-right{display:none}.section{padding:65px 0}.section-head{flex-direction:column;gap:12px}.section-head>p{max-width:100%}.problem-grid,.contact-grid,.offer-band-grid,.addons{grid-template-columns:1fr;gap:28px}.service-grid,.pricing-grid,.review-grid,.steps{grid-template-columns:1fr}.service-card p{min-height:0}.offer-count{max-width:400px;margin:auto;width:100%}.footer-grid{grid-template-columns:1fr 1fr;gap:30px}.footer-grid>div:first-child{grid-column:1/-1}.project-rail{margin-right:-16px;padding-right:16px}.form-grid{grid-template-columns:1fr;gap:0}.contact-form{padding:23px}.footer-bottom{flex-direction:column;margin-top:35px}.addons-list>div{align-items:flex-start}.addons-list b{white-space:normal;text-align:right}.floating-offer{right:13px;bottom:13px}.marquee{padding:11px 0}}
 @media(max-width:420px){.brand{font-size:14px}.brand img{width:39px;height:39px}.brand small{font-size:7px}.hero h1{font-size:37px}.popup{padding:35px 22px 25px}.popup-discount{font-size:70px}.timer>span{min-width:58px;font-size:24px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}[data-reveal]{opacity:1;transform:none}}
+
+
+/* Hikima Forge — warm light corporate treatment, retains motion & responsiveness */
+:root{color:#14273b;background:#f5f3ef}
+.site{color:#24374a;background:linear-gradient(180deg,#fffdf9 0%,#f4f5f4 35%,#fffdf9 100%)}
+.site-backdrop{position:fixed;inset:0;background-image:linear-gradient(90deg,rgba(255,253,248,.91),rgba(255,253,248,.82)),url('https://images.pexels.com/photos/7433898/pexels-photo-7433898.jpeg?auto=compress&cs=tinysrgb&w=1800');background-size:cover;background-position:center 37%;background-repeat:no-repeat;opacity:.48;filter:saturate(.75);z-index:-1}
+.topnav{background:rgba(255,253,248,.95);border-bottom:1px solid #dcdedc;box-shadow:0 4px 25px rgba(22,42,58,.07)}
+.topnav .brand{color:#0b2842}.topnav .brand b{color:#a97629}.topnav .brand small{color:#667683}.navlinks button,.mobile-nav button{color:#283c4b}.navlinks button:hover,.mobile-nav button:hover{color:#a57732}.menu-toggle{color:#17364e}.mobile-nav{background:#fffaf1;border-top:1px solid #e7e1d6;box-shadow:0 15px 25px #0d29461f}
+.btn-outline{background:#ffffffd9;color:#18364d;border-color:#d7d7d0}.btn-outline:hover{background:#fff9e9;border-color:#bd9654}.btn-dark{background:#132f47;color:#fff;box-shadow:0 12px 30px #18384d24}.btn-dark:hover{background:#234962}
+.hero{background:linear-gradient(125deg,rgba(253,251,247,.90),rgba(245,245,239,.72));}
+.hero h1,.section h2,.about-content h2{color:#112d43}.hero-copy>p,.section-head>p,.problem-text p,.about-content p{color:#445666}.hero-copy strong{color:#142e43}.hero-proof{color:#475d6a}
+.eyebrow{background:#fff7e5;border-color:#e7c990;color:#855912}.eyebrow span{color:#8e5f15}
+.section{position:relative;background:rgba(255,254,251,.32)}
+.section-head h2 em,.hero h1 em,.problem-grid h2 em,.about-content h2 em{color:#b1843e}
+.kicker{color:#a67834}.problem{background:rgba(255,255,255,.55)}.problem-text p{color:#485c6d}.text-link{color:#86601e}
+.service-card,.project-card,.review-card,.price-card{background:rgba(255,255,255,.95);border:1px solid #e5e0d6;box-shadow:0 16px 40px rgba(31,50,60,.06)}
+.service-card:hover,.project-card:hover,.review-card:hover{border-color:#c4a16c;box-shadow:0 22px 50px rgba(38,53,62,.12)}
+.service-card h3,.project-body h3,.review-person b,.price-name,.addons h3,.steps h3{color:#183248}
+.service-card p,.project-body p,.review-card blockquote,.price-tagline,.price-card li,.steps p{color:#536574}
+.service-icon{background:#f9f1e0;color:#a6732d}.service-number{color:#bb9762}.service-card button,.project-body a{color:#97702e}
+.showcase{background:rgba(248,246,239,.52)}.project-type{color:#a57b3a}.portfolio-fallback{background:#e9edf0;color:#1f3d52}
+.price-card.featured{background:#fffaf0;border-color:#c99d52;box-shadow:0 20px 58px rgba(81,63,27,.12)}
+.price-line del{color:#79838b;font-size:17px}.price-line strong{color:#14344a;font-size:clamp(28px,2.7vw,38px)}.price-card .price-disclaimer{color:#657582}
+.price-card ul{margin-top:18px}.price-card li svg{color:#b1843e}.price-card .btn-outline{color:#193b52}
+.original-label,.offer-label{font-size:10px;font-weight:900;letter-spacing:.13em;color:#687987}.offer-label{color:#916521}.savings{display:inline-flex;width:max-content;border-radius:30px;padding:5px 10px;background:#eef7eb;color:#2b6736;font-size:12px;font-weight:850}
+.addons{background:rgba(255,255,255,.92);border:1px solid #e5ded1}.addons p,.addons-list>div{color:#596c79}.addons-list>div{border-bottom-color:#e5e0d7}.addons-list b{color:#92652d}.fine-print{color:#6c7c89!important}
+.reviews{background:rgba(255,255,255,.55)}.review-card blockquote{color:#374d5c}.review-person{border-color:#e6e0d5}.review-person small{color:#6f8190}.review-avatar{background:#f2e7d1;color:#846021}
+.process{background:rgba(250,248,242,.45)}.steps>div{border-color:#beaa87}.steps strong{color:#b48b49}
+.contact{background:linear-gradient(155deg,rgba(247,245,239,.78),rgba(236,241,240,.7))}.contact-grid>div>p,.contact-list{color:#44596a}
+.contact-form{background:rgba(255,255,255,.97);border:1px solid #dfd9cc;box-shadow:0 20px 65px rgba(33,48,56,.1)}.form-top h3,.contact-form label{color:#1b374b}.contact-form input:not([type=checkbox]),.contact-form select,.contact-form textarea{background:#fbfaf7;border-color:#d8dedc;color:#132e42}.contact-form input::placeholder,.contact-form textarea::placeholder{color:#8b979c}.email-submit{color:#95672e}
+.about-section{background:rgba(255,253,248,.8)}.about-grid{display:grid;grid-template-columns:.88fr 1.12fr;gap:65px;align-items:center}.about-photo{min-height:465px;border-radius:24px;background-image:linear-gradient(160deg,rgba(7,31,49,.07),rgba(10,38,59,.14)),url('https://images.pexels.com/photos/7433898/pexels-photo-7433898.jpeg?auto=compress&cs=tinysrgb&w=1100');background-size:cover;background-position:center;box-shadow:0 30px 60px #173c532b}.about-visual{position:relative}.about-photo-badge{position:absolute;left:22px;bottom:-20px;background:#0e2b43;color:#f7f0e3;padding:16px 20px;border-radius:12px;display:flex;flex-wrap:wrap;gap:9px;align-items:center;box-shadow:0 12px 30px #142e4033;font-size:12px;font-weight:800;letter-spacing:.07em}.about-photo-badge span{color:#e1b968}.about-content h2{font-size:clamp(32px,4vw,51px);line-height:1.14;margin:16px 0 22px}.about-content p{line-height:1.9;font-size:15px}.about-pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:30px 0}.about-pillars>div{border-top:2px solid #c4a46f;padding-top:12px}.about-pillars span{display:block;color:#9d7433;font-size:12px;font-weight:900}.about-pillars strong{display:block;color:#16354c;font-size:15px;margin:8px 0}.about-pillars small{color:#607280;font-size:12px;line-height:1.6;display:block}
+/* Keep premium dark sections intentional to give the pale page contrast */
+.offer-band{background:linear-gradient(135deg,#0d2436,#16374c);color:#f6f6f3}.offer-band h2{color:#fff}.offer-band .eyebrow{background:#284254;color:#f2d49d}.offer-band p{color:#d0dce1}
+.footer{background:#081b2a;color:#eff4f6}
+@media(max-width:1000px){.mobile-nav{background:#fffcf6}}
+@media(max-width:760px){.about-grid{grid-template-columns:1fr;gap:45px}.about-photo{min-height:280px}.about-photo-badge{left:12px;right:12px;justify-content:center;bottom:-18px}.about-pillars{grid-template-columns:1fr 1fr}.about-content h2{font-size:36px}.site-backdrop{background-position:center center}}
+@media(max-width:420px){.about-pillars{grid-template-columns:1fr}.about-photo-badge{font-size:10px}}
