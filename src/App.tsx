@@ -77,6 +77,11 @@ export default function App(){
   const [form,setForm]=useState({name:'',business:'',phone:'',email:'',type:'',brief:'',consent:false});
   const [modal,setModal]=useState<'privacy'|'terms'|null>(null);
   const [videoFailed,setVideoFailed]=useState(false);
+  const [guideEmail,setGuideEmail]=useState('');
+  const [guideConsent,setGuideConsent]=useState(false);
+  const [guideBusy,setGuideBusy]=useState(false);
+  const [guideError,setGuideError]=useState('');
+  const [guideComplete,setGuideComplete]=useState(false);
   const portfolioRef=useRef<HTMLDivElement>(null);
   const promoOpened=useRef(false);
   useReveal();
@@ -97,6 +102,26 @@ export default function App(){
     `December 30% sales-page discount: ${discount&&clock.active?'Requested':'Not requested'}`,
     `Project requirements: ${form.brief}`,'Please let me know the next steps and final quotation.'
   ].join('\n');
+  const requestGuide=async(e:React.FormEvent)=>{
+    e.preventDefault();
+    if(!guideConsent || !guideEmail.trim()) return;
+    setGuideBusy(true);setGuideError('');
+    const endpoint=import.meta.env.VITE_SUPABASE_URL;
+    const publicKey=import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY;
+    if(!endpoint || !publicKey){setGuideError('The free guide is not available yet. Please check back shortly.');setGuideBusy(false);return;}
+    try{
+      const result=await fetch(`${endpoint.replace(/\/$/,'')}/functions/v1/guide-download`,{
+        method:'POST',headers:{'Content-Type':'application/json','apikey':publicKey},
+        body:JSON.stringify({email:guideEmail.trim(),consent:guideConsent,source:'hikima-forge-website'})
+      });
+      const body=await result.json();
+      if(!result.ok || !body.downloadUrl) throw new Error(body.error || 'The guide is temporarily unavailable.');
+      setGuideComplete(true);
+      const link=document.createElement('a');link.href=body.downloadUrl;link.target='_blank';link.rel='noopener noreferrer';
+      document.body.appendChild(link);link.click();link.remove();
+    }catch(err){setGuideError(err instanceof Error?err.message:'Unable to prepare your guide right now.');}
+    finally{setGuideBusy(false);}
+  };
   const contact=(e?:React.FormEvent)=>{e?.preventDefault();if(!form.consent)return;window.location.href=`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message())}`;};
   const email=()=>{if(!form.name||!form.business||!form.phone||!form.brief||!form.consent){alert('Please complete the required fields and consent before choosing email.');return;}window.location.href=`mailto:${EMAIL}?subject=${encodeURIComponent('Hikima Forge project enquiry')}&body=${encodeURIComponent(message())}`;};
   return <div className="site">
@@ -111,17 +136,17 @@ export default function App(){
     <main>
       <header className="hero" id="home"><div className="container hero-grid">
         <div className="hero-video-wrap" data-reveal>
-          <div className="video-top"><span className="live-dot"/> THE HIKIMA FORGE EXPERIENCE <span className="video-top-right">INTRODUCING YOUR NEXT MOVE</span></div>
-          <div className="hero-video">
+          <div className="video-top"><span className="video-led"><span className="live-dot"/> THE GROWTH EXPERIENCE</span><span className="video-top-right">HIKIMA FORGE ORIGINAL</span></div>
+          <div className="hero-video"><div className="video-overlay-top" aria-hidden="true"><span>THE FUTURE OF YOUR BUSINESS</span><span>↗</span></div>
             {!videoFailed?<video src={VIDEO} playsInline muted autoPlay loop controls preload="metadata" poster={ASSET('hikima-forge-logo.png')} onError={()=>setVideoFailed(true)} aria-label="Hikima Forge introductory video"/>:<div className="video-cover"><img src={ASSET('hikima-forge-logo.png')} alt="Hikima Forge"/><span>Built on Wisdom. Driven by Growth.</span></div>}
           </div>
-          <div className="video-caption"><span><Play size={13} fill="currentColor"/> WATCH OUR STORY</span><span>SALES PAGES • VISIBILITY • GROWTH</span></div>
+          <div className="video-caption"><span><Play size={13} fill="currentColor"/> SEE THE POSSIBILITIES</span><span>STRATEGY / CREATIVE / TECHNOLOGY</span></div>
         </div>
         <div className="hero-copy" data-reveal><div className="eyebrow"><Sparkles size={15}/> DECEMBER VISIBILITY CAMPAIGN <span>30% OFF</span></div>
           <h1>Stop being <em>the best-kept secret.</em> Let your business be seen.</h1>
-          <p>Your customers are online. The question is: <strong>can they find you—and will they choose you?</strong> We build persuasive sales pages and digital growth systems that turn interest into enquiries, conversations and opportunities to sell.</p>
+          <div className="results-promise"><Zap size={17}/> <strong>Progress you can measure in weeks, not months.</strong></div><p>Your customers are online. The question is: <strong>can they find you—and will they choose you?</strong> We build persuasive sales pages and digital growth systems that turn interest into enquiries, conversations and opportunities to sell.</p>
           <div className="hero-actions"><button className="btn btn-gold" onClick={()=>apply()}>Apply for 30% Off <ArrowRight size={19}/></button><button className="btn btn-outline" onClick={()=>go('work')}>Explore Our Projects <ArrowUpRight size={18}/></button></div>
-          <div className="hero-proof"><span><CheckCircle2 size={17}/> Made for real businesses</span><span><CheckCircle2 size={17}/> WhatsApp-ready enquiries</span></div>
+          <div className="hero-guide-link"><button type="button" onClick={()=>go('guide')}>Get our free Nigerian business-growth guide <ArrowUpRight size={16}/></button></div><div className="hero-proof"><span><CheckCircle2 size={17}/> Made for real businesses</span><span><CheckCircle2 size={17}/> WhatsApp-ready enquiries</span></div>
         </div>
       </div><div className="hero-glow"/></header>
 
@@ -138,6 +163,38 @@ export default function App(){
       </div></section>
       <section className="section problem" id="why"><div className="container problem-grid"><div data-reveal><span className="kicker">WHY HIKIMA FORGE?</span><h2>Being good at what you do is not enough <em>if nobody sees it.</em></h2></div><div className="problem-text" data-reveal><p>Your product deserves more than another forgotten social media post. Your service deserves more than an empty inbox.</p><p>We help you explain your offer clearly, present it beautifully, and guide interested people straight to a conversation or order.</p><button className="text-link" onClick={()=>apply()}>Let's make your business visible <ArrowUpRight size={19}/></button></div></div></section>
 
+      <section className="section promise-section" id="roadmap"><div className="container">
+        <div className="section-head" data-reveal="up"><div><span className="kicker">THE FIRST 30 DAYS</span><h2>Not just a website. <em>A clear plan to move forward.</em></h2></div><p>Every engagement has a measurable path. What changes first is your visibility, presentation, tracking and enquiry process—not a guaranteed sales figure.</p></div>
+        <div className="roadmap-grid">
+          {[
+            {week:'WEEK 01',title:'Diagnose & position',copy:'Understand your offer, ideal buyers and the reasons prospects hesitate. Define the page structure, message and enquiry goal.',result:'Clear offer, audience and campaign direction.'},
+            {week:'WEEK 02',title:'Build the experience',copy:'Create persuasive sales copy, a responsive sales page and clear WhatsApp, email or order pathways.',result:'A professional, mobile-first place to send customers.'},
+            {week:'WEEK 03',title:'Launch & connect',copy:'Publish the page, check key journeys, configure measurement and prepare or activate agreed Meta campaigns.',result:'A live, trackable customer acquisition pathway.'},
+            {week:'WEEK 04',title:'Review & refine',copy:'Assess visitor behaviour, enquiry quality, campaign signals and friction points. Prioritise improvements.',result:'An initial performance review and action plan.'}
+          ].map((step,i)=><article className="roadmap-card" key={step.week} data-reveal={i%2?'right':'left'} style={{transitionDelay:`${i*85}ms`}}><div className="roadmap-index">0{i+1}<span>{step.week}</span></div><h3>{step.title}</h3><p>{step.copy}</p><div className="roadmap-outcome"><CheckCircle2 size={18}/><span>{step.result}</span></div></article>)}
+        </div>
+        <div className="milestone-strip" data-reveal="up"><div><span>MONTH 01</span><strong>Launch with clarity</strong><p>Offer, page, enquiry flow and baseline tracking.</p></div><div><span>MONTH 02</span><strong>Learn from real signals</strong><p>Compare visitor actions, enquiries and creative performance.</p></div><div><span>MONTH 03</span><strong>Refine what works</strong><p>Improve messaging, follow-up and campaign efficiency.</p></div></div>
+        <p className="roadmap-note">Milestones depend on the project scope, client approvals, ad budget and data available. Revenue, customer numbers and advertising outcomes cannot be guaranteed.</p>
+      </div></section>
+
+      <section className="section values-section" id="values"><div className="container">
+        <div className="section-head" data-reveal="left"><div><span className="kicker">THE PRINCIPLES BEHIND OUR WORK</span><h2>What <em>HIKIMA</em> means to us.</h2></div><p>Wisdom is more than our name. It is how we approach every business challenge, every design decision and every customer journey.</p></div>
+        <div className="values-grid">{[
+          ['H','Honesty','Clear expectations, transparent recommendations and no invented promises.'],
+          ['I','Innovation','Thoughtful ideas that solve real commercial challenges.'],
+          ['K','Knowledge','Research, customer understanding and informed execution.'],
+          ['I','Integrity','Respect for your brand, customer data and investment.'],
+          ['M','Mastery','Careful craftsmanship in copy, development and design.'],
+          ['A','Accountability','Clear deliverables, reporting and continuous improvement.']
+        ].map(([letter,title,detail],i)=><article key={`${letter}-${i}`} className="value-card" data-reveal={i%3===0?'left':i%3===2?'right':'up'} style={{transitionDelay:`${i%3*75}ms`}}><span className="value-letter">{letter}</span><div><h3>{title}</h3><p>{detail}</p></div></article>)}</div>
+      </div></section>
+
+      <section className="section guide-section" id="guide"><div className="container guide-layout">
+        <div className="guide-copy" data-reveal="left"><span className="kicker">FREE BUSINESS GROWTH RESOURCE</span><h2>Why do promising Nigerian businesses <em>struggle to get noticed?</em></h2><p>Get our upcoming practical guide on common visibility gaps, unclear offers, weak customer journeys and missed enquiry opportunities—and the questions to ask before investing in promotion.</p><div className="guide-points"><span><CheckCircle2 size={17}/> Spot common visibility problems</span><span><CheckCircle2 size={17}/> Evaluate your sales journey</span><span><CheckCircle2 size={17}/> Identify practical next steps</span></div><p className="guide-disclaimer">This resource is being prepared. We will enable downloads when the actual PDF is published; it is not presented as completed original research.</p></div>
+        <div className="guide-panel" data-reveal="right"><div className="guide-cover"><span>HIKIMA FORGE / INSIGHTS</span><strong>THE VISIBILITY GAP</strong><p>A practical look at what keeps promising businesses from reaching the right customers.</p><small>COMPLIMENTARY GUIDE · PDF</small></div>
+          <form onSubmit={requestGuide} className="guide-form"><label htmlFor="guide-email">Your business email</label><input id="guide-email" type="email" autoComplete="email" required placeholder="you@business.com" value={guideEmail} onChange={e=>setGuideEmail(e.target.value)}/><label className="guide-consent"><input type="checkbox" checked={guideConsent} onChange={e=>setGuideConsent(e.target.checked)} required/><span>I agree to receive this guide and understand my email will be used to deliver it. Optional marketing updates require separate consent.</span></label><button className="btn btn-gold" type="submit" disabled={guideBusy||!guideConsent}>{guideBusy?'Preparing your guide…':guideComplete?'Download again':'Get the free PDF'} <ArrowRight size={17}/></button>{guideError&&<p className="guide-error" role="alert">{guideError}</p>}{guideComplete&&<p className="guide-success" role="status">Your guide link has opened. Check your browser's download window.</p>}<small>No spam. Contact: {EMAIL}</small></form>
+        </div>
+      </div></section>
       <section className="section" id="services"><div className="container"><div className="section-head" data-reveal><div><span className="kicker">WHAT WE BUILD</span><h2>Solutions built around <em>your business goals.</em></h2></div><p>One product or a complete catalogue. A booking enquiry or a customer order. We make the journey clearer.</p></div><div className="service-grid">{services.map(({icon:Icon,title,desc},i)=><article className="service-card" data-reveal key={title} style={{transitionDelay:`${i%3*80}ms`}}><div className="service-icon"><Icon size={27}/></div><div className="service-number">0{i+1}</div><h3>{title}</h3><p>{desc}</p><button onClick={()=>apply(title)} aria-label={`Enquire about ${title}`}>Discuss this service <ArrowUpRight size={17}/></button></article>)}</div></div></section>
 
       <section className="section showcase" id="work"><div className="container"><div className="section-head" data-reveal><div><span className="kicker">SELECTED PROJECTS</span><h2>Work that speaks <em>for itself.</em></h2></div><div className="carousel-buttons"><button aria-label="Scroll projects left" onClick={()=>portfolioRef.current?.scrollBy({left:-360,behavior:'smooth'})}><ChevronLeft/></button><button aria-label="Scroll projects right" onClick={()=>portfolioRef.current?.scrollBy({left:360,behavior:'smooth'})}><ChevronRight/></button></div></div><div className="project-rail" ref={portfolioRef}>{projects.map(p=><article className="project-card" key={p.title}><a href={p.url} target="_blank" rel="noopener noreferrer"><PortfolioImage file={p.image} title={p.title}/><span className="project-open"><ExternalLink size={18}/></span></a><div className="project-body"><span className="project-type">{p.type}</span><h3>{p.title}</h3><p>{p.detail}</p><a href={p.url} target="_blank" rel="noopener noreferrer">Explore website <ArrowUpRight size={18}/></a></div></article>)}</div></div></section>
@@ -155,7 +212,7 @@ export default function App(){
     <footer className="footer"><div className="container footer-grid"><div><button className="brand" onClick={()=>go('home')}><img src={ASSET('hikima-forge-logo.png')} alt=""/><span>HIKIMA <b>FORGE</b><small>BUILT ON WISDOM. DRIVEN BY GROWTH.</small></span></button><p>Business growth and technology solutions shaped by clarity, creativity and purpose.</p></div><div><h4>Explore</h4><button onClick={()=>go('services')}>Services</button><button onClick={()=>go('work')}>Portfolio</button><button onClick={()=>go('pricing')}>Pricing</button></div><div><h4>Get in touch</h4><a href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener noreferrer">09026755149</a><a href={`mailto:${EMAIL}`}>{EMAIL}</a><div className="footer-policies"><button onClick={()=>setModal('privacy')}>Privacy</button><button onClick={()=>setModal('terms')}>Terms</button></div></div></div><div className="container footer-bottom"><span>© {new Date().getFullYear()} Hikima Forge. All rights reserved.</span><span>Built on Wisdom. Driven by Growth.</span></div></footer>
 
     {clock.active&&!dismissed&&<button className="floating-offer" onClick={()=>setPop(true)}><Sparkles size={19}/><span><strong>30% OFF</strong><small>Tap to apply</small></span><ArrowUpRight size={18}/></button>}
-    {pop&&clock.active&&<div className="overlay" onClick={dismiss}><div className="popup" role="dialog" aria-modal="true" aria-label="Hikima Forge December 30% offer" onClick={e=>e.stopPropagation()}><button className="popup-close" onClick={dismiss} aria-label="Dismiss promotion"><X/></button><div className="popup-shine"><Sparkles size={24}/></div><span className="kicker">HIKIMA FORGE DECEMBER OFFER</span><h2>Your business deserves to be <em>seen.</em></h2><div className="popup-discount">30<span>% OFF</span></div><p>Give your products or services a persuasive online home. Apply for 30% off eligible sales-page development.</p><div className="popup-timer"><Clock3 size={16}/> Offer countdown · {String(clock.h).padStart(2,'0')}:{String(clock.m).padStart(2,'0')}:{String(clock.s).padStart(2,'0')}</div><button className="btn btn-gold" onClick={()=>apply()}>Click to apply <ArrowRight size={19}/></button><button className="popup-later" onClick={dismiss}>Maybe later</button></div></div>}
+    {pop&&clock.active&&<div className="overlay" onClick={dismiss}><div className="popup" role="dialog" aria-modal="true" aria-label="Hikima Forge December 30% offer" onClick={e=>e.stopPropagation()}><button className="popup-close" onClick={dismiss} aria-label="Dismiss promotion"><X/></button><div className="popup-shine"><Sparkles size={24}/></div><div className="popup-orbit popup-orbit-one" aria-hidden="true"/><div className="popup-orbit popup-orbit-two" aria-hidden="true"/><span className="kicker">A SMARTER MOVE FOR YOUR BUSINESS</span><h2>Your business deserves to be <em>seen.</em></h2><div className="popup-discount">30<span>% OFF</span></div><p>Turn your offer into a persuasive sales experience—built to earn attention, communicate value and open real customer conversations.</p><div className="popup-benefits"><span><Check size={15}/> Conversion-focused pages</span><span><Check size={15}/> WhatsApp-ready enquiries</span></div><div className="popup-timer"><Clock3 size={16}/> Offer countdown · {String(clock.h).padStart(2,'0')}:{String(clock.m).padStart(2,'0')}:{String(clock.s).padStart(2,'0')}</div><button className="btn btn-gold" onClick={()=>apply()}>Click to apply <ArrowRight size={19}/></button><button className="popup-later" onClick={dismiss}>Maybe later</button></div></div>}
     {modal&&<div className="overlay" onClick={()=>setModal(null)}><div className="policy-dialog" role="dialog" aria-modal="true" onClick={e=>e.stopPropagation()}><button className="popup-close" onClick={()=>setModal(null)} aria-label="Close"><X/></button><h2>{modal==='privacy'?'Privacy Policy':'Service Terms'}</h2>{modal==='privacy'?<><p>Hikima Forge collects information you voluntarily provide through enquiries, such as your name, business, phone number and project requirements, to respond to you and discuss requested services.</p><p>WhatsApp and email communications are also processed by their respective providers. Please do not submit passwords or sensitive personal records through this form.</p><p>For enquiries about your information, contact {EMAIL}.</p></>:<><p>Service scope, deliverables, revisions, timelines, hosting, advertising spend and third-party subscriptions are agreed in a written quotation before work begins.</p><p>Advertised discounts apply to eligible development services during the stated campaign period. Results from advertising and web pages are not guaranteed.</p></>}</div></div>}
   </div>;
 }
