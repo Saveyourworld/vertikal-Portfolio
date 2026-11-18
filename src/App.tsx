@@ -9,7 +9,7 @@ const EMAIL = 'hikimaforge@proton.me';
 const OFFER_DEADLINE = new Date('2027-01-01T00:00:00+01:00').getTime();
 // Add the approved December campaign MP4 to public/hikima-hero.mp4.
 // Video is visible first in the hero, plays muted automatically where supported, and has native controls.
-const VIDEO = ASSET('hikima-hero.mp4');
+const VIDEO = ASSET('vertikal.mp4');
 const PACKAGE_DATA = [
   {name:'Sales Starter',price:95000, tagline:'A powerful introduction to your offer',features:['One product or service sales page','Mobile responsive design','Persuasive offer presentation','WhatsApp enquiry button','Simple order or enquiry form','Basic SEO structure']},
   {name:'Sales Professional',price:180000,tagline:'For businesses ready to convert more interest',features:['Everything in Sales Starter','Expanded persuasive sales copy','Gallery, testimonials and videos','Custom enquiry / order experience','Email + WhatsApp integrations','Basic analytics setup']},
