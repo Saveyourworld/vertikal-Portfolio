@@ -7,8 +7,7 @@ const ASSET = (name: string) => `${BASE}${name}`;
 const WHATSAPP = '2349026755149';
 const EMAIL = 'hikimaforge@proton.me';
 const OFFER_DEADLINE = new Date('2027-01-01T00:00:00+01:00').getTime();
-// Add the approved December campaign MP4 to public/hikima-hero.mp4.
-// Video is visible first in the hero, plays muted automatically where supported, and has native controls.
+// Hero video: keep the existing filename in public/. Playback begins with sound after a visitor taps play.
 const VIDEO = ASSET('vertikal.mp4');
 const PACKAGE_DATA = [
   {name:'Sales Starter',price:95000, tagline:'A powerful introduction to your offer',features:['One product or service sales page','Mobile responsive design','Persuasive offer presentation','WhatsApp enquiry button','Simple order or enquiry form','Basic SEO structure']},
@@ -23,14 +22,16 @@ const services = [
   {icon:MessageCircle,title:'WhatsApp & Email Leads',desc:'Connect interested people with your business using practical enquiry and ordering flows.'},
   {icon:Code2,title:'Business Technology Solutions',desc:'Custom websites, digital systems and automation solutions for growing businesses.'},
 ];
-type Project = {title:string;type:string;detail:string;image:string;url:string};
+type Project = {title:string;type:string;detail:string;image:string;url?:string};
 const projects:Project[] = [
-  {title:'Real Smile',type:'Dental & Healthcare',detail:'A professional online presence for showcasing dental services and connecting prospective patients to a clinic.',image:'project-realsmile.webp',url:'https://realsmile.com.ng/'},
+  {title:'RoyalSmile',type:'Dental & Healthcare',detail:'A professional online presence for showcasing dental services and connecting prospective patients to a clinic.',image:'project-realsmile.webp',url:'https://realsmile.com.ng/'},
   {title:'Options',type:'Business Website',detail:'Business-facing web presentation built around clear messaging, responsive design and easy enquiry.',image:'project-options.webp',url:'https://options.com.ng/'},
-  {title:'Gymny Solar Tech',type:'Solar & Energy',detail:'Product and service visibility for an energy business, with a customer-friendly path to making enquiries.',image:'project-gymny-solar.webp',url:'https://gymnysolartech.com.ng/'},
+  {title:'GeminiSolar Tech',type:'Solar & Energy',detail:'Product and service visibility for an energy business, with a customer-friendly path to making enquiries.',image:'project-gymny-solar.webp',url:'https://gymnysolartech.com.ng/'},
   {title:'Electric Spin Scrubber',type:'Single-Product Sales Page',detail:'Long-form product benefits, demonstration content, offers and an integrated order journey.',image:'project-electric-scrubber.webp',url:'https://captrends.com.ng/electric-scrubber/'},
   {title:'CORE Footwear',type:'Fashion Sales Page',detail:'Premium footwear offers, sales storytelling, package comparisons, media and order capture.',image:'project-core-footwear.webp',url:'https://captrends.com.ng/corefootwears/'},
   {title:'Coffee Press',type:'Product Sales Page',detail:'Focused product presentation that helps interested customers understand the offer and take action.',image:'project-coffee-press.webp',url:'https://captions.com.ng/coffee-press/'},
+  {title:'Colar 360 Solar Generator',type:'Solar Generator Sales Page',detail:'A product showcase for a solar power solution, presenting key product benefits and a clear path to enquiry.',image:'project-colar-360.webp'},
+  {title:'Seth Stitches',type:'Fashion Collection & Catalog',detail:'A fashion-focused collection experience showcasing men’s outfits and helping interested customers explore designs.',image:'project-seth-stitches.webp'},
 ];
 // These reviews were supplied in your original Vertikal code. Publish only if the
 // names, roles, statements and figures have been authenticated and approved.
@@ -96,6 +97,17 @@ export default function App(){
   const go=(id:string)=>{setMobileMenu(false);document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});};
   const apply=(plan='Sales Professional')=>{setSelected(plan);setDiscount(clock.active);setPop(false);go('apply');};
   const dismiss=()=>{setPop(false);setDismissed(true);sessionStorage.setItem('hf-promo-dismissed','true');};
+   const playHeroWithSound=async()=>{
+     const video=heroVideoRef.current;
+     if(!video) return;
+     setVideoError('');
+     video.pause();
+     video.currentTime=0;
+     video.muted=false;
+     video.volume=1;
+     try{await video.play();setVideoStarted(true);}catch{setVideoError('Please use the video controls to start playback with sound.');}
+   };
+
   const message=()=>[
     'Hello Hikima Forge! I would like a business growth consultation.',
     `Name: ${form.name}`,`Business: ${form.business}`,`WhatsApp: ${form.phone}`,`Email: ${form.email||'Not provided'}`,`Business category: ${form.type}`,`Selected package: ${selected}`,
@@ -138,7 +150,11 @@ export default function App(){
         <div className="hero-video-wrap" data-reveal>
           <div className="video-top"><span className="video-led"><span className="live-dot"/> THE GROWTH EXPERIENCE</span><span className="video-top-right">HIKIMA FORGE ORIGINAL</span></div>
           <div className="hero-video"><div className="video-overlay-top" aria-hidden="true"><span>THE FUTURE OF YOUR BUSINESS</span><span>↗</span></div>
-            {!videoFailed?<video src={VIDEO} playsInline muted autoPlay loop controls preload="metadata" poster={ASSET('hikima-forge-logo.png')} onError={()=>setVideoFailed(true)} aria-label="Hikima Forge introductory video"/>:<div className="video-cover"><img src={ASSET('hikima-forge-logo.png')} alt="Hikima Forge"/><span>Built on Wisdom. Driven by Growth.</span></div>}
+             {!videoFailed?<>
+               <video ref={heroVideoRef} src={VIDEO} playsInline loop controls={videoStarted} preload="metadata" poster={ASSET('hikima-forge-logo.png')} onError={()=>setVideoFailed(true)} onPlay={()=>setVideoStarted(true)} onPause={()=>setVideoStarted(false)} aria-label="Hikima Forge introductory video with sound"/>
+               {!videoStarted&&<button className="hero-sound-start" type="button" onClick={playHeroWithSound} aria-label="Play Hikima Forge video with sound from the beginning"><span className="sound-play-icon"><Play size={29} fill="currentColor"/></span><strong>WATCH WITH SOUND</strong><small>Hear the Hikima Forge story</small></button>}
+               {videoError&&<p role="alert" className="hero-video-error">{videoError}</p>}
+             </>:<div className="video-cover"><img src={ASSET('hikima-forge-logo.png')} alt="Hikima Forge"/><span>Built on Wisdom. Driven by Growth.</span></div>}
           </div>
           <div className="video-caption"><span><Play size={13} fill="currentColor"/> SEE THE POSSIBILITIES</span><span>STRATEGY / CREATIVE / TECHNOLOGY</span></div>
         </div>
@@ -197,7 +213,7 @@ export default function App(){
       </div></section>
       <section className="section" id="services"><div className="container"><div className="section-head" data-reveal><div><span className="kicker">WHAT WE BUILD</span><h2>Solutions built around <em>your business goals.</em></h2></div><p>One product or a complete catalogue. A booking enquiry or a customer order. We make the journey clearer.</p></div><div className="service-grid">{services.map(({icon:Icon,title,desc},i)=><article className="service-card" data-reveal key={title} style={{transitionDelay:`${i%3*80}ms`}}><div className="service-icon"><Icon size={27}/></div><div className="service-number">0{i+1}</div><h3>{title}</h3><p>{desc}</p><button onClick={()=>apply(title)} aria-label={`Enquire about ${title}`}>Discuss this service <ArrowUpRight size={17}/></button></article>)}</div></div></section>
 
-      <section className="section showcase" id="work"><div className="container"><div className="section-head" data-reveal><div><span className="kicker">SELECTED PROJECTS</span><h2>Work that speaks <em>for itself.</em></h2></div><div className="carousel-buttons"><button aria-label="Scroll projects left" onClick={()=>portfolioRef.current?.scrollBy({left:-360,behavior:'smooth'})}><ChevronLeft/></button><button aria-label="Scroll projects right" onClick={()=>portfolioRef.current?.scrollBy({left:360,behavior:'smooth'})}><ChevronRight/></button></div></div><div className="project-rail" ref={portfolioRef}>{projects.map(p=><article className="project-card" key={p.title}><a href={p.url} target="_blank" rel="noopener noreferrer"><PortfolioImage file={p.image} title={p.title}/><span className="project-open"><ExternalLink size={18}/></span></a><div className="project-body"><span className="project-type">{p.type}</span><h3>{p.title}</h3><p>{p.detail}</p><a href={p.url} target="_blank" rel="noopener noreferrer">Explore website <ArrowUpRight size={18}/></a></div></article>)}</div></div></section>
+      <section className="section showcase" id="work"><div className="container"><div className="section-head" data-reveal><div><span className="kicker">SELECTED PROJECTS</span><h2>Work that speaks <em>for itself.</em></h2></div><div className="carousel-buttons"><button aria-label="Scroll projects left" onClick={()=>portfolioRef.current?.scrollBy({left:-360,behavior:'smooth'})}><ChevronLeft/></button><button aria-label="Scroll projects right" onClick={()=>portfolioRef.current?.scrollBy({left:360,behavior:'smooth'})}><ChevronRight/></button></div></div><div className="project-rail" ref={portfolioRef}>{projects.map(p=><article className="project-card" key={p.title}>{p.url?<a href={p.url} target="_blank" rel="noopener noreferrer"><PortfolioImage file={p.image} title={p.title}/><span className="project-open"><ExternalLink size={18}/></span></a>:<PortfolioImage file={p.image} title={p.title}/>}<div className="project-body"><span className="project-type">{p.type}</span><h3>{p.title}</h3><p>{p.detail}</p>{p.url&&<a href={p.url} target="_blank" rel="noopener noreferrer">Explore website <ArrowUpRight size={18}/></a>}</div></article>)}</div></div></section>
 
       <section className="offer-band" id="offer"><div className="container offer-band-grid" data-reveal><div><div className="eyebrow"><Zap size={15}/> DECEMBER VISIBILITY OFFER</div><h2>Give your business the attention it deserves.</h2><p>Get 30% off eligible sales-page development this December. Choose the service that fits your growth plan.</p></div><div className="offer-count"><strong>30<span>%</span></strong><small>OFF SALES-PAGE DEVELOPMENT</small><div className="timer"><span>{String(clock.h).padStart(2,'0')}<small>HOURS</small></span><b>:</b><span>{String(clock.m).padStart(2,'0')}<small>MINS</small></span><b>:</b><span>{String(clock.s).padStart(2,'0')}<small>SECS</small></span></div><p>December Visibility Offer</p><button className="btn btn-gold" onClick={()=>apply()}>Apply for your discount <ArrowRight size={18}/></button></div></div></section>
 

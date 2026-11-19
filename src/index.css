@@ -67,3 +67,13 @@
 @media(max-width:1000px){.roadmap-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.roadmap-card p{min-height:auto}.values-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.hero-video{aspect-ratio:4/3.5}.roadmap-grid,.values-grid,.milestone-strip,.guide-layout{grid-template-columns:1fr}.roadmap-card{padding:22px}.milestone-strip>div{padding:20px}.guide-cover{min-height:230px}.results-promise{border-radius:16px}.video-top-right,.video-caption span:last-child{display:none}}
 @media(prefers-reduced-motion:reduce){[data-reveal],[data-reveal="left"],[data-reveal="right"],[data-reveal="up"]{transform:none!important;opacity:1!important}}
+
+/* Premium hero video: sound starts with a deliberate visitor interaction. */
+.hero-sound-start{position:absolute;inset:0;z-index:4;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:32px 20px;border:0;color:#fff;background:linear-gradient(180deg,rgba(5,15,28,.12),rgba(4,14,27,.62));text-shadow:0 2px 16px rgba(0,0,0,.65);transition:background .3s ease}
+.hero-sound-start:hover{background:linear-gradient(180deg,rgba(5,15,28,.25),rgba(4,14,27,.79))}
+.sound-play-icon{width:84px;height:84px;display:grid;place-items:center;padding-left:5px;border-radius:50%;background:linear-gradient(140deg,#f3d997,#c89746);color:#101d30;box-shadow:0 12px 45px rgba(0,0,0,.36),0 0 0 10px rgba(246,215,158,.15);transition:transform .25s ease}
+.hero-sound-start:hover .sound-play-icon{transform:scale(1.09)}
+.hero-sound-start strong{font-size:clamp(15px,2.5vw,22px);letter-spacing:.14em;font-weight:900}
+.hero-sound-start small{font-size:13px;color:#f1e1c1;letter-spacing:.035em}
+.hero-video-error{position:absolute;left:12px;right:12px;bottom:12px;z-index:5;margin:0;text-align:center;color:white;background:rgba(7,22,41,.93);padding:12px;border-radius:10px;font-size:12px}
+@media (prefers-reduced-motion:reduce){.sound-play-icon{transition:none}}
