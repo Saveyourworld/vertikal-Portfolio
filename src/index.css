@@ -77,3 +77,135 @@
 .hero-sound-start small{font-size:13px;color:#f1e1c1;letter-spacing:.035em}
 .hero-video-error{position:absolute;left:12px;right:12px;bottom:12px;z-index:5;margin:0;text-align:center;color:white;background:rgba(7,22,41,.93);padding:12px;border-radius:10px;font-size:12px}
 @media (prefers-reduced-motion:reduce){.sound-play-icon{transition:none}}
+
+
+/* ========================================================
+   Hikima Forge — restrained editorial hero, November 2026
+   Intentional: no decorative video frame, no logo poster.
+   ======================================================== */
+.hero{
+  padding-top:clamp(116px, 10vw, 150px);
+  padding-bottom:clamp(60px, 7vw, 108px);
+  min-height:0;
+  background:linear-gradient(115deg,rgba(255,253,248,.72),rgba(246,247,243,.62));
+}
+.hero-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);
+  align-items:center;
+  gap:clamp(28px,4vw,65px);
+}
+.hero-media{width:100%;min-width:0;position:relative;z-index:1;}
+.hero-film{
+  position:relative;
+  width:100%;
+  aspect-ratio:16 / 9;
+  overflow:hidden;
+  border:0;
+  outline:0;
+  border-radius:11px;
+  background:#0c1721;
+  box-shadow:0 20px 50px rgba(17,37,51,.15);
+}
+.hero-film video{
+  display:block;
+  width:100%;height:100%;
+  object-fit:cover;
+  object-position:center center;
+  background:#0c1721;
+}
+/* Portrait source videos stay fully visible instead of cropping the presenter. */
+.hero-film.is-portrait video{object-fit:contain;}
+.film-start{
+  position:absolute;inset:0;z-index:2;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:14px;
+  border:0;
+  padding:20px;
+  background:linear-gradient(180deg,rgba(8,18,29,.08),rgba(8,18,29,.28));
+  color:#fff;
+  transition:background .25s ease;
+}
+.film-start:hover,.film-start:focus-visible{background:linear-gradient(180deg,rgba(8,18,29,.13),rgba(8,18,29,.42));}
+.film-play-icon{
+  display:grid;place-items:center;
+  width:64px;height:64px;padding-left:3px;
+  border-radius:50%;
+  color:#172e3a;
+  background:#f7f4ec;
+  box-shadow:0 5px 22px rgba(0,0,0,.17);
+  transition:transform .24s ease,background .24s ease;
+}
+.film-start:hover .film-play-icon{transform:scale(1.065);background:#fff;}
+.film-start-label{
+  color:#fff;
+  font-size:12px;
+  font-weight:760;
+  line-height:1.4;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+  text-shadow:0 1px 10px rgba(0,0,0,.65);
+}
+.film-unavailable{
+  position:absolute;inset:0;
+  display:grid;place-items:center;
+  padding:24px;
+  color:#e6ebee;text-align:center;
+  font-size:14px;line-height:1.6;
+}
+.hero-video-error{position:absolute;z-index:3;bottom:12px;left:12px;right:12px;text-align:center;background:rgba(10,25,37,.91);color:white;padding:9px 12px;font-size:12px;border-radius:7px;}
+/* Editorial statement, not a boxed badge. */
+.results-promise{
+  display:flex;
+  align-items:flex-start;
+  gap:15px;
+  margin:26px 0 22px;
+  padding:0;
+  width:auto;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  color:#18364a;
+  font-size:clamp(15px,1.45vw,19px);
+  line-height:1.5;
+  font-weight:500;
+  letter-spacing:-.012em;
+}
+.results-promise .results-accent{
+  display:block;
+  align-self:stretch;
+  flex:0 0 3px;
+  border-radius:3px;
+  background:#bd904a;
+}
+.results-promise strong{color:#9b6d29;font-weight:800;}
+.hero-copy{min-width:0;padding:0;}
+.hero h1{margin-top:21px;margin-bottom:0;}
+@media (max-width:1000px) {
+  .hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:27px;}
+}
+@media (max-width:760px) {
+  .hero{padding-top:101px;padding-bottom:62px;}
+  .hero-grid{display:flex;flex-direction:column;gap:28px;}
+  .hero-media{max-width:none;width:100%;}
+  .hero-film{aspect-ratio:16 / 9;border-radius:9px;box-shadow:0 13px 32px rgba(17,37,51,.13);}
+  .hero-copy{width:100%;padding:0;}
+  .film-play-icon{width:55px;height:55px;}
+  .film-start-label{font-size:11px;letter-spacing:.06em;}
+  .results-promise{font-size:16px;gap:12px;margin:23px 0 19px;}
+}
+@media (max-width:420px) {
+  .hero .container{width:calc(100% - 24px);}
+  .hero-film{border-radius:7px;}
+  .film-play-icon{width:49px;height:49px;}
+  .film-play-icon svg{width:20px;height:20px;}
+}
+@media (prefers-reduced-motion:reduce) {
+  .film-start,.film-play-icon{transition:none;}
+}
+.hero-copy {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}

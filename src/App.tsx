@@ -8,7 +8,7 @@ const WHATSAPP = '2349026755149';
 const EMAIL = 'hikimaforge@proton.me';
 const OFFER_DEADLINE = new Date('2027-01-01T00:00:00+01:00').getTime();
 // Hero video: keep the existing filename in public/. Playback begins with sound after a visitor taps play.
-const VIDEO = ASSET('vertikal.mp4');
+const VIDEO = ASSET('hikima.mp4');
 const PACKAGE_DATA = [
   {name:'Sales Starter',price:95000, tagline:'A powerful introduction to your offer',features:['One product or service sales page','Mobile responsive design','Persuasive offer presentation','WhatsApp enquiry button','Simple order or enquiry form','Basic SEO structure']},
   {name:'Sales Professional',price:180000,tagline:'For businesses ready to convert more interest',features:['Everything in Sales Starter','Expanded persuasive sales copy','Gallery, testimonials and videos','Custom enquiry / order experience','Email + WhatsApp integrations','Basic analytics setup']},
@@ -23,16 +23,67 @@ const services = [
   {icon:Code2,title:'Business Technology Solutions',desc:'Custom websites, digital systems and automation solutions for growing businesses.'},
 ];
 type Project = {title:string;type:string;detail:string;image:string;url?:string};
-const projects:Project[] = [
-  {title:'RoyalSmile',type:'Dental & Healthcare',detail:'A professional online presence for showcasing dental services and connecting prospective patients to a clinic.',image:'project-realsmile.webp',url:'https://realsmile.com.ng/'},
-  {title:'Options',type:'Business Website',detail:'Business-facing web presentation built around clear messaging, responsive design and easy enquiry.',image:'project-options.webp',url:'https://options.com.ng/'},
-  {title:'GeminiSolar Tech',type:'Solar & Energy',detail:'Product and service visibility for an energy business, with a customer-friendly path to making enquiries.',image:'project-gymny-solar.webp',url:'https://gymnysolartech.com.ng/'},
-  {title:'Electric Spin Scrubber',type:'Single-Product Sales Page',detail:'Long-form product benefits, demonstration content, offers and an integrated order journey.',image:'project-electric-scrubber.webp',url:'https://captrends.com.ng/electric-scrubber/'},
-  {title:'CORE Footwear',type:'Fashion Sales Page',detail:'Premium footwear offers, sales storytelling, package comparisons, media and order capture.',image:'project-core-footwear.webp',url:'https://captrends.com.ng/corefootwears/'},
-  {title:'Coffee Press',type:'Product Sales Page',detail:'Focused product presentation that helps interested customers understand the offer and take action.',image:'project-coffee-press.webp',url:'https://captions.com.ng/coffee-press/'},
-  {title:'Colar 360 Solar Generator',type:'Solar Generator Sales Page',detail:'A product showcase for a solar power solution, presenting key product benefits and a clear path to enquiry.',image:'project-colar-360.webp'},
-  {title:'Seth Stitches',type:'Fashion Collection & Catalog',detail:'A fashion-focused collection experience showcasing men’s outfits and helping interested customers explore designs.',image:'project-seth-stitches.webp'},
+
+const projects: Project[] = [
+  {
+    title: 'RoyalSmile',
+    type: 'Dental & Healthcare',
+    detail: 'A professional online presence for showcasing dental services and connecting prospective patients to a clinic.',
+    image: 'project-realsmile.webp',
+    url: 'https://royalsmile.com.ng/'
+  },
+  {
+    title: 'Options',
+    type: 'Business Website',
+    detail: 'Business-facing web presentation built around clear messaging, responsive design and easy enquiry.',
+    image: 'project-options.webp',
+    url: 'https://captrends.com.ng/'
+  },
+  {
+    title: 'GeminiSolar Tech',
+    type: 'Solar & Energy',
+    detail: 'Product and service visibility for an energy business, with a customer-friendly path to making enquiries.',
+    image: 'project-gymny-solar.webp',
+    url: 'https://colar3600.netlify.app/'
+  },
+  {
+    title: 'Electric Spin Scrubber',
+    type: 'Single-Product Sales Page',
+    detail: 'Long-form product benefits, demonstration content, offers and an integrated order journey.',
+    image: 'project-electric-scrubber.webp',
+    url: 'https://captrends.com.ng/electric-scrubber/'
+  },
+  {
+    title: 'CORE Footwear',
+    type: 'Fashion Sales Page',
+    detail: 'Premium footwear offers, sales storytelling, package comparisons, media and order capture.',
+    image: 'project-core-footwear.webp',
+    url: 'https://captrends.com.ng/corefootwears/'
+  },
+  {
+    title: 'Coffee Press',
+    type: 'Product Sales Page',
+    detail: 'Focused product presentation that helps interested customers understand the offer and take action.',
+    image: 'project-coffee-press.webp',
+    url: 'https://captrends.com.ng/coffee-press/'
+  },
+  {
+    title: 'Colar 3600 Solar Generator',
+    type: 'Solar Generator Sales Page',
+    detail: 'A product showcase for a solar power solution, presenting key product benefits and a clear path to enquiry.',
+    image: 'project-colar-360.webp',
+    url: 'https://geminisolartech.com.ng/'
+  },
+  {
+    title: 'Seth Stitches',
+    type: 'Fashion Collection & Catalog',
+    detail: 'A fashion-focused collection experience showcasing men’s outfits and helping interested customers explore designs.',
+    image: 'seth.webp',
+    url: 'https://sethstitches.netlify.app/'
+  }
 ];
+
+
 // These reviews were supplied in your original Vertikal code. Publish only if the
 // names, roles, statements and figures have been authenticated and approved.
 const reviews = [
@@ -79,7 +130,8 @@ export default function App(){
   const [modal,setModal]=useState<'privacy'|'terms'|null>(null);
   const [videoFailed,setVideoFailed]=useState(false);
   const heroVideoRef = useRef<HTMLVideoElement>(null);
-  const [videoStarted,setVideoStarted] = useState(false);
+     const [videoStarted,setVideoStarted] = useState(false);
+   const [videoPortrait,setVideoPortrait] = useState(false);
   const [videoError,setVideoError] = useState('');
   const [guideEmail,setGuideEmail]=useState('');
   const [guideConsent,setGuideConsent]=useState(false);
@@ -150,23 +202,98 @@ export default function App(){
 
     <main>
       <header className="hero" id="home"><div className="container hero-grid">
-        <div className="hero-video-wrap" data-reveal>
-          <div className="video-top"><span className="video-led"><span className="live-dot"/> THE GROWTH EXPERIENCE</span><span className="video-top-right">HIKIMA FORGE ORIGINAL</span></div>
-          <div className="hero-video"><div className="video-overlay-top" aria-hidden="true"><span>THE FUTURE OF YOUR BUSINESS</span><span>↗</span></div>
-             {!videoFailed?<>
-               <video ref={heroVideoRef} src={VIDEO} playsInline loop controls={videoStarted} preload="metadata" poster={ASSET('hikima-forge-logo.png')} onError={()=>setVideoFailed(true)} onPlay={()=>setVideoStarted(true)} onPause={()=>setVideoStarted(false)} aria-label="Hikima Forge introductory video with sound"/>
-               {!videoStarted&&<button className="hero-sound-start" type="button" onClick={playHeroWithSound} aria-label="Play Hikima Forge video with sound from the beginning"><span className="sound-play-icon"><Play size={29} fill="currentColor"/></span><strong>WATCH WITH SOUND</strong><small>Hear the Hikima Forge story</small></button>}
-               {videoError&&<p role="alert" className="hero-video-error">{videoError}</p>}
-             </>:<div className="video-cover"><img src={ASSET('hikima-forge-logo.png')} alt="Hikima Forge"/><span>Built on Wisdom. Driven by Growth.</span></div>}
-          </div>
-          <div className="video-caption"><span><Play size={13} fill="currentColor"/> SEE THE POSSIBILITIES</span><span>STRATEGY / CREATIVE / TECHNOLOGY</span></div>
-        </div>
-        <div className="hero-copy" data-reveal><div className="eyebrow"><Sparkles size={15}/> DECEMBER VISIBILITY CAMPAIGN <span>30% OFF</span></div>
-          <h1>Stop being <em>the best-kept secret.</em> Let your business be seen.</h1>
-          <div className="results-promise"><Zap size={17}/> <strong>Progress you can measure in weeks, not months.</strong></div><p>Your customers are online. The question is: <strong>can they find you—and will they choose you?</strong> We build persuasive sales pages and digital growth systems that turn interest into enquiries, conversations and opportunities to sell.</p>
-          <div className="hero-actions"><button className="btn btn-gold" onClick={()=>apply()}>Apply for 30% Off <ArrowRight size={19}/></button><button className="btn btn-outline" onClick={()=>go('work')}>Explore Our Projects <ArrowUpRight size={18}/></button></div>
-          <div className="hero-guide-link"><button type="button" onClick={()=>go('guide')}>Get our free Nigerian business-growth guide <ArrowUpRight size={16}/></button></div><div className="hero-proof"><span><CheckCircle2 size={17}/> Made for real businesses</span><span><CheckCircle2 size={17}/> WhatsApp-ready enquiries</span></div>
-        </div>
+         <div className="hero-media" data-reveal="left">
+           <div className={`hero-film${videoPortrait ? ' is-portrait' : ''}`}>
+             {!videoFailed ? (
+               <>
+                 <video
+                   ref={heroVideoRef}
+                   src={VIDEO}
+                   playsInline
+                   loop
+                   controls={videoStarted}
+                   preload="auto"
+                   onLoadedData={event => {
+                     const player = event.currentTarget;
+                     // A real frame from the video is the preview: no branded poster image.
+                     if (!videoStarted && player.currentTime === 0 && Number.isFinite(player.duration) && player.duration > 0.3) {
+                       player.currentTime = Math.min(0.15, player.duration / 3);
+                     }
+                   }}
+                   onLoadedMetadata={event => {
+                     const player = event.currentTarget;
+                     setVideoPortrait(player.videoHeight > player.videoWidth);
+                   }}
+                   onError={() => setVideoFailed(true)}
+                   onPlay={() => setVideoStarted(true)}
+                   aria-label="Watch the Hikima Forge introduction with sound"
+                 />
+                 {!videoStarted && (
+                   <button className="film-start" type="button" onClick={playHeroWithSound} aria-label="Watch the Hikima Forge introduction with sound">
+                     <span className="film-play-icon"><Play size={24} fill="currentColor" aria-hidden="true" /></span>
+                     <span className="film-start-label">Watch with sound</span>
+                   </button>
+                 )}
+                 {videoError && <p className="hero-video-error" role="alert">{videoError}</p>}
+               </>
+             ) : (
+               <div className="film-unavailable" role="status">The introduction video is temporarily unavailable.</div>
+             )}
+           </div>
+         </div>
+        
+<div className="hero-copy">
+  <div className="eyebrow">
+    <Sparkles size={15} />
+    DECEMBER VISIBILITY CAMPAIGN
+    <span>30% OFF</span>
+  </div>
+
+  <h1>
+    Stop being <em>the best-kept secret.</em> Let your business be seen.
+  </h1>
+
+  <p className="results-promise">
+    <span className="results-accent" aria-hidden="true" />
+    <span>
+      Progress you can measure in weeks, not months.
+    </span>
+  </p>
+
+  <p>
+    Your customers are online. The question is: can they find you—and
+    will they choose you? We build persuasive sales pages and digital
+    growth systems that turn interest into enquiries, conversations,
+    and opportunities to sell.
+  </p>
+
+  <div className="hero-actions">
+    <button className="btn btn-gold" onClick={() => apply()}>
+      Apply for 30% Off <ArrowRight size={19} />
+    </button>
+
+    <button className="btn btn-outline" onClick={() => go('work')}>
+      Explore Our Projects <ArrowUpRight size={18} />
+    </button>
+  </div>
+
+  <div className="hero-guide-link">
+    <button type="button" onClick={() => go('guide')}>
+      Get our free Nigerian business-growth guide
+      <ArrowUpRight size={16} />
+    </button>
+  </div>
+
+  <div className="hero-proof">
+    <span>
+      <CheckCircle2 size={17} /> Made for real businesses
+    </span>
+    <span>
+      <CheckCircle2 size={17} /> WhatsApp-ready enquiries
+    </span>
+  </div>
+</div>
+
       </div><div className="hero-glow"/></header>
 
       <div className="marquee" aria-label="Hikima Forge capabilities"><div className="marquee-track">{Array.from({length:2}).flatMap((_,i)=>['SALES PAGES','BUSINESS VISIBILITY','META ADS','CONVERSION COPY','CUSTOMER ENQUIRIES','DIGITAL SOLUTIONS'].map((t,j)=><span key={`${i}-${j}`}><span className="marquee-star">✦</span>{t}</span>))}</div></div>
