@@ -78,6 +78,9 @@ export default function App(){
   const [form,setForm]=useState({name:'',business:'',phone:'',email:'',type:'',brief:'',consent:false});
   const [modal,setModal]=useState<'privacy'|'terms'|null>(null);
   const [videoFailed,setVideoFailed]=useState(false);
+  const heroVideoRef = useRef<HTMLVideoElement>(null);
+  const [videoStarted,setVideoStarted] = useState(false);
+  const [videoError,setVideoError] = useState('');
   const [guideEmail,setGuideEmail]=useState('');
   const [guideConsent,setGuideConsent]=useState(false);
   const [guideBusy,setGuideBusy]=useState(false);
