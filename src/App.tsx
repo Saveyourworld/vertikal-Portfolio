@@ -116,6 +116,7 @@ export default function App(){
   const [guideBusy,setGuideBusy]=useState(false);
   const [guideError,setGuideError]=useState('');
   const [guideComplete,setGuideComplete]=useState(false);
+  const [guideDownloadUrl,setGuideDownloadUrl]=useState('');
   const portfolioRef=useRef<HTMLDivElement>(null);
   const promoOpened=useRef(false);
   useReveal();
@@ -150,7 +151,7 @@ export default function App(){
   const requestGuide=async(e:React.FormEvent)=>{
     e.preventDefault();
     if(!guideConsent||!guideEmail.trim())return;
-    setGuideBusy(true);setGuideError('');setGuideComplete(false);
+    setGuideBusy(true);setGuideError('');setGuideComplete(false);setGuideDownloadUrl('');
     const endpoint=import.meta.env.VITE_SUPABASE_URL;
     const key=import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY;
     if(!endpoint||!key){setGuideError('PDF service is not configured for this website deployment. Check Netlify environment variables.');setGuideBusy(false);return;}
@@ -166,6 +167,9 @@ export default function App(){
       // No async popup blocker: the Storage URL is attachment-disposition; this
       // same-tab navigation triggers a download in browsers that support it.
       setGuideComplete(true);
+      setGuideDownloadUrl(body.downloadUrl);
+      // A same-tab navigation is not blocked as an async popup. The signed
+      // attachment URL also remains below as a fallback if needed.
       window.location.assign(body.downloadUrl);
     }catch(err){
       const detail=err instanceof Error?err.message:'Unknown network error';
@@ -293,7 +297,7 @@ export default function App(){
       <section className="section guide-section" id="guide"><div className="container guide-layout">
         <div className="guide-copy" data-reveal="left"><span className="kicker">{t('guideKicker')}</span><h2>{t('guideTitle')}</h2><p>{t('guideDescription')}</p><div className="guide-points"><span><CheckCircle2 size={17}/> {t('guidePoint1')}</span><span><CheckCircle2 size={17}/> {t('guidePoint2')}</span><span><CheckCircle2 size={17}/> {t('guidePoint3')}</span></div></div>
         <div className="guide-panel" data-reveal="right"><div className="guide-cover"><span>HIKIMA FORGE / INSIGHTS</span><strong>THE VISIBILITY GAP</strong><p>A practical look at what keeps promising businesses from reaching the right customers.</p><small>COMPLIMENTARY GUIDE · PDF</small></div>
-          <form onSubmit={requestGuide} className="guide-form"><label htmlFor="guide-email">{t('guideEmail')}</label><input id="guide-email" type="email" autoComplete="email" required placeholder="you@business.com" value={guideEmail} onChange={e=>setGuideEmail(e.target.value)}/><label className="guide-consent"><input type="checkbox" checked={guideConsent} onChange={e=>setGuideConsent(e.target.checked)} required/><span>{t('guideConsent')}</span></label><button className="btn btn-gold" type="submit" disabled={guideBusy||!guideConsent}>{guideBusy?t('guideBusy'):guideComplete?t('guideAgain'):t('guideSubmit')} <ArrowRight size={17}/></button>{guideError&&<p className="guide-error" role="alert">{guideError}</p>}{guideComplete&&<p className="guide-success" role="status">{t('guideSuccess')}</p>}<small>No spam. Contact: {EMAIL}</small></form>
+          <form onSubmit={requestGuide} className="guide-form"><label htmlFor="guide-email">{t('guideEmail')}</label><input id="guide-email" type="email" autoComplete="email" required placeholder="you@business.com" value={guideEmail} onChange={e=>setGuideEmail(e.target.value)}/><label className="guide-consent"><input type="checkbox" checked={guideConsent} onChange={e=>setGuideConsent(e.target.checked)} required/><span>{t('guideConsent')}</span></label><button className="btn btn-gold" type="submit" disabled={guideBusy||!guideConsent}>{guideBusy?t('guideBusy'):guideComplete?t('guideAgain'):t('guideSubmit')} <ArrowRight size={17}/></button>{guideError&&<p className="guide-error" role="alert">{guideError}</p>}{guideComplete&&<p className="guide-success" role="status">{t('guideSuccess')} {guideDownloadUrl&&<a href={guideDownloadUrl} rel="noopener noreferrer" style={{textDecoration:'underline',fontWeight:700}}>Open the PDF manually</a>}</p>}<small>No spam. Contact: {EMAIL}</small></form>
         </div>
       </div></section>
       <section className="section" id="services"><div className="container"><div className="section-head" data-reveal><div><span className="kicker">{t('servicesKicker')}</span><h2>{t('servicesTitle')}</h2></div><p>{t('servicesLead')}</p></div><div className="service-grid">{services.map(({icon:Icon,title,desc},i)=><article className="service-card" data-reveal key={title} style={{transitionDelay:`${i%3*80}ms`}}><div className="service-icon"><Icon size={27}/></div><div className="service-number">0{i+1}</div><h3>{localService(language,i,title,desc)[0]}</h3><p>{localService(language,i,title,desc)[1]}</p><button onClick={()=>apply(title)} aria-label={`Enquire about ${title}`}>{t('discuss')} <ArrowUpRight size={17}/></button></article>)}</div></div></section>
