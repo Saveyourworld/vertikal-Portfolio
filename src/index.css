@@ -204,8 +204,38 @@
 @media (prefers-reduced-motion:reduce) {
   .film-start,.film-play-icon{transition:none;}
 }
-.hero-copy {
-  opacity: 1 !important;
-  visibility: visible !important;
-  transform: none !important;
-}
+
+/* HIKIMA FORGE 2026 — market visual, language switcher, testimonial film */
+.topnav .navwrap{gap:10px}
+.language-picker{position:relative;flex:0 0 auto;z-index:80}
+.language-toggle{display:flex;align-items:center;gap:7px;border:1px solid #d6dce2;background:#fff;color:#17384b;padding:9px 11px;border-radius:999px;font-size:12px;font-weight:800;white-space:nowrap;box-shadow:0 2px 9px #0a253311}
+.language-toggle:hover,.language-toggle[aria-expanded=true]{border-color:#bf9c5b;background:#fffdf8}
+.language-menu{position:absolute;z-index:90;top:calc(100% + 10px);right:0;min-width:176px;background:white;border:1px solid #e3ded2;box-shadow:0 14px 38px #102d4630;border-radius:14px;padding:7px;animation:languageRise .22s ease-out}
+.language-menu button{display:flex;justify-content:space-between;align-items:center;gap:14px;color:#18374b;background:none;border:0;width:100%;text-align:left;border-radius:9px;padding:10px 12px;font-size:13px;font-weight:650}
+.language-menu button:hover,.language-menu button[aria-pressed=true]{background:#f6efe2;color:#8b672e}
+.language-nudge{position:fixed;z-index:75;top:90px;right:18px;width:min(340px,calc(100vw - 36px));padding:16px 19px 18px;border:1px solid #d4be93;border-radius:18px;background:#fffdf9;box-shadow:0 20px 48px #173b5033;animation:languageRise .45s cubic-bezier(.2,.85,.2,1)}
+.language-nudge>span{font-size:13px;font-weight:800;color:#213c4c;display:block;padding-right:22px}
+.language-nudge>div{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}
+.language-nudge>div button{border:1px solid #ddd0b8;background:#fff;color:#263b49;border-radius:11px;padding:9px 11px;font-size:12px;font-weight:750}
+.language-nudge>div button:hover{background:#efd9ac}
+.language-nudge-close{position:absolute;top:8px;right:8px;border:0;background:transparent;color:#334a57;padding:7px}
+@keyframes languageRise{from{opacity:0;transform:translateY(-9px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.hero-copy{opacity:1!important;visibility:visible!important;transform:none!important}
+.market-spotlight{position:relative;width:100%;aspect-ratio:16/7;overflow:hidden;border-radius:11px;margin-top:16px;box-shadow:0 16px 34px #16314316;isolation:isolate}
+.market-spotlight img{width:100%;height:100%;display:block;object-fit:cover;object-position:center 48%;transition:transform .9s cubic-bezier(.2,.7,.1,1)}
+.market-spotlight:hover img{transform:scale(1.045)}
+.market-spotlight:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(7,27,38,.8),rgba(7,27,38,.36) 66%,rgba(7,27,38,.05));pointer-events:none}
+.market-overlay{position:absolute;z-index:1;left:6%;top:50%;transform:translateY(-50%);width:min(77%,360px);display:flex;flex-direction:column;gap:7px;color:#fff}
+.market-overlay>span{font-size:clamp(14px,1.65vw,20px);font-weight:800;line-height:1.25;text-shadow:0 1px 5px #0007}
+.market-overlay small{font-size:clamp(11px,1.05vw,13px);line-height:1.4;color:#f3e7cf}
+.hf-video-reviews{background:linear-gradient(125deg,#0a2636,#123b52);color:#fff;border-block:1px solid #c7ac713f}
+.hf-video-reviews .hf-video-review-grid{display:grid;grid-template-columns:.8fr 1.2fr;align-items:center;gap:55px}
+.hf-video-reviews h2{color:#fff;line-height:1.12}
+.hf-video-reviews p{color:#d8e3e9;line-height:1.8;max-width:410px;margin:20px 0 27px}
+.hf-review-film{aspect-ratio:16/9;overflow:hidden;border-radius:12px;background:#061a26;box-shadow:0 20px 60px #0005}
+.hf-review-film video{width:100%;height:100%;object-fit:contain;display:block}
+@media(max-width:1100px){.navlinks{gap:13px}.navlinks button{font-size:12px}.language-toggle span:nth-child(2){max-width:56px;overflow:hidden;text-overflow:ellipsis}}
+@media(max-width:860px){.navlinks{display:none}.language-picker{margin-left:auto}.desktop-cta{display:none}.menu-toggle{display:flex;order:3}.language-picker{order:2}.brand{order:1}}
+@media(max-width:760px){.hero-grid{gap:25px}.market-spotlight{aspect-ratio:16/7.6;margin-top:11px;border-radius:9px}.market-overlay{left:5%;width:85%}.hf-video-reviews .hf-video-review-grid{grid-template-columns:1fr;gap:28px}.hf-video-reviews{padding-block:66px}.language-nudge{top:82px}.language-toggle{padding:9px}}
+@media(max-width:420px){.language-toggle span:nth-child(2){max-width:52px}.market-spotlight{aspect-ratio:16/9}.market-overlay>span{font-size:14px}}
+@media(prefers-reduced-motion:reduce){.market-spotlight img,.language-menu,.language-nudge{animation:none;transition:none}}
